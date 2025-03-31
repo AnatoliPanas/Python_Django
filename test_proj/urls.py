@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from first_app.views import django_greetings, user_greetings, index_page
+from first_app.views import django_greetings, user_greetings, index_page, user_hello
 
 urlpatterns = [
     path('index_page/', index_page),
@@ -24,5 +24,6 @@ urlpatterns = [
     path('greetings/', django_greetings),
     path('greetings-f-str/<str:name>/', user_greetings),
     path('greetings-f-str/', user_greetings, name='default_user_greetings'),
+    path('hello/<str:name>/', user_hello),
 
 ]

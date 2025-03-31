@@ -16,3 +16,8 @@ def user_greetings(request, name = "Anatoli"):
 
 def index_page(request):
     return render(request, 'my_html.html')
+
+def user_hello(request, name):
+    return HttpResponse(
+        f"<h1>Hello, {name}!!! :)</h1>"
+    )
