@@ -1,3 +1,5 @@
+https://docs.djangoproject.com/en/5.1/ref/models/fields/
+
 pip install django-environ - для работы с .env
 pip install django
 django-admin startproject test_proj . - создание проекта Django
@@ -5,6 +7,9 @@ python .\manage.py startapp first_app - создание приложения
 python .\manage.py runserver - запуск сервера Django
 python manage.py migrate - применение стандартных миграции
 python manage.py createsuperuser - создание Юзера
+python .\manage.py makemigrations - инициализация БД и проверка изменения
+python .\manage.py migrate - применяет миграцию
+python .\manage.py showmigrations - показать все миграции
 
 -----------вирт окр--------------
 python -m venv .venv - создание виртуального окружения.
@@ -19,3 +24,4 @@ git commit -m "коментарии к комиту"
 git remote add origin 'имя вашего репазитория'
 git push -u origin main
 
+Регистрация моделей происходит в файле проекта, admin.py

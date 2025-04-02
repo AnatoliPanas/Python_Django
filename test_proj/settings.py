@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # local
     'first_app.apps.FirstAppConfig',
+    'books.apps.BooksConfig',
 ]
 
 MIDDLEWARE = [
