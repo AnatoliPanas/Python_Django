@@ -13,6 +13,7 @@ import os
 from pathlib import Path
 from environ import Env
 import first_app.apps
+import task_manager.apps
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     # local
     'first_app.apps.FirstAppConfig',
     'books.apps.BooksConfig',
+    'task_manager.apps.TaskManagerConfig',
 ]
 
 MIDDLEWARE = [
