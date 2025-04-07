@@ -9,11 +9,9 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-import os
 from pathlib import Path
 from environ import Env
-import first_app.apps
-import task_manager.apps
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,8 +29,6 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
-
-
 
 # Application definition
 
@@ -62,6 +58,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'test_proj.urls'
+
+AUTH_USER_MODEL = 'books.User'
 
 TEMPLATES = [
     {
