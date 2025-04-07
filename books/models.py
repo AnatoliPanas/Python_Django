@@ -55,5 +55,5 @@ class Book(models.Model):
         verbose_name = "Book"
         verbose_name_plural = "Books"
         unique_together = ("title", "author")
-        ordering = ("release_year")
+        ordering = ("release_year",)
 
