@@ -23,7 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     birth_day = models.DateField(null=True, blank=True)
 
-    objects = UserManager()
+    objects = UserManager() #Интерфейс доступа к БД (запись, изменение, удаление и т.д.)
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email",]

@@ -10,6 +10,7 @@ python manage.py createsuperuser - создание Юзера
 python manage.py makemigrations - инициализация БД и проверка изменения
 python manage.py migrate - применяет миграцию
 python manage.py showmigrations - показать все миграции
+python .\manage.py shell - запуск консоли Django
 
 -----------вирт окр--------------
 python -m venv .venv - создание виртуального окружения.
