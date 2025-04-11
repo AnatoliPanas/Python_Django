@@ -58,7 +58,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'test_proj.urls'
-
+# AUTH_USER_MODEL = 'auth.User'
 AUTH_USER_MODEL = 'books.User'
 
 TEMPLATES = [

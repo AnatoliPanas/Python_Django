@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.db import models
+from django.db.models import Index, UniqueConstraint, CheckConstraint, Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -101,3 +102,10 @@ class Book(models.Model):
         verbose_name_plural = "Books"
         unique_together = ("title", "author")
         ordering = ("release_year",)
+        indexes = [
+            Index(fields=['isbn'], name='isbn_index'),
+            Index(fields=['isbn', 'language'], name='isbn_lang_index'),
+        ]
+        constraints=[
+            CheckConstraint(check=Q(rating__gte=0), name="negative_rating_constraint")
+        ]
