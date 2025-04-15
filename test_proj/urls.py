@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from books.views import list_of_books, get_book_detail, create_book
+from books.views import list_of_books, get_book_detail, book_create
 from first_app.views import django_greetings, user_greetings, index_page, user_hello
-from task_manager.views import user_hello1
+from task_manager.views import user_hello1, tasks_create, list_of_tasks, get_task_by_id, tasks_count, \
+    tasks_count_by_status, tasks_of_overdue
 
 urlpatterns = [
     path('index_page/', index_page),
@@ -31,6 +32,13 @@ urlpatterns = [
     path('hello1/', user_hello1),
     path('books/', list_of_books),
     path('books/<int:book_id>/', get_book_detail),
-    path('books/create/', create_book)
+    path('books/create/', book_create),
+
+    path('tasks/create/', tasks_create),
+    path('tasks', list_of_tasks),
+    path('tasks/<int:task_id>', get_task_by_id),
+    path('tasks/count', tasks_count),
+    path('tasks/status_count', tasks_count_by_status),
+    path('tasks/tasks_of_overdue', tasks_of_overdue),
 
 ]
