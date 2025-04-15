@@ -1,26 +1,15 @@
-from django.core.serializers import serialize
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from rest_framework.request import Request
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+
 from books.serializers import BookListSerializer, BookDetailSerializer, BookCreateSerializer
 from books.models import Book
 
 
 @api_view(['GET'])
-def list_of_books_(request) -> Response:
-    return Response(
-        data={
-            "message": "Hello, World"
-        },
-        status=200
-    )
-
-
-@api_view(['GET'])
 def list_of_books(request) -> Response:
-    books = Book.objects.all()
+    books = Book.objects.all()  # Queryset[<Book obj1>, ..., <Book obj150>]
+
     serializer = BookListSerializer(books, many=True)
 
     return Response(
@@ -48,18 +37,14 @@ def get_book_detail(request, book_id: int) -> Response:
         status=200
     )
 
+
 @api_view(['POST'])
-def create_book(request: Request):
-    row_data = request.data
-    serializer = BookCreateSerializer(data=row_data)
+def book_create(request):
+    serializer = BookCreateSerializer(data=request.data)
+
     if serializer.is_valid():
         serializer.save()
-        return Response(
-            data=serializer.data,
-            status=201
-        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        return Response(
-            data=serializer.errors,
-            status=400
-        )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

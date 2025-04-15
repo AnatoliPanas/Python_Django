@@ -15,28 +15,20 @@ class BookSerializer(serializers.Serializer):
 
     class Meta:
         model = None
-        fields = ('title',
-                  'genre',
-                  'author',
-                  'rating',
-                  'pages',
-                  'release_year')
+        fields = ('title', 'rating', 'pages', 'release_year')
 
 
 class BookListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ['title',
-                  'genre',
-                  'author',
-                  'rating',
-                  'release_year',
-                  'price']
-
-    # def validate_<field>(self, value):
-    #     pass
-    # def validate(self, attrs):
-    #     pass
+        fields = [
+            'title',
+            'genre',
+            'author',
+            'rating',
+            'release_year',
+            'price'
+        ]
 
 
 class BookDetailSerializer(serializers.ModelSerializer):
@@ -48,5 +40,14 @@ class BookDetailSerializer(serializers.ModelSerializer):
 class BookCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ["title", "rating", "genre", "release_year", "author", "price", "isbn"]
-
+        fields = [
+            'title',
+            'rating',
+            'genre',
+            'release_year',
+            'author',
+            'price',
+            'pages',
+            'language',
+            'isbn'
+        ]
