@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+
+from books.views import list_of_books, get_book_detail, create_book
 from first_app.views import django_greetings, user_greetings, index_page, user_hello
 from task_manager.views import user_hello1
 
@@ -26,6 +28,9 @@ urlpatterns = [
     path('greetings-f-str/<str:name>/', user_greetings),
     path('greetings-f-str/', user_greetings, name='default_user_greetings'),
     path('hello/<str:name>/', user_hello),
-    path('hello1', user_hello1),
+    path('hello1/', user_hello1),
+    path('books/', list_of_books),
+    path('books/<int:book_id>/', get_book_detail),
+    path('books/create/', create_book)
 
 ]

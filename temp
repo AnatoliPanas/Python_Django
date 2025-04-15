@@ -1,6 +1,9 @@
 https://docs.djangoproject.com/en/5.1/ref/models/fields/
 https://docs.djangoproject.com/en/5.2/ref/models/options/
 
+pip install djangorestfraemwork - для работы с rest
+
+
 pip install django-environ - для работы с .env
 pip install django
 django-admin startproject <Имя проекта> . - создание проекта Django
