@@ -20,7 +20,7 @@ from django.urls import path
 from books.views import BooksListCreateAPIView, BookDetailUpdateDeleteAPIView
 from first_app.views import django_greetings, user_greetings, index_page, user_hello
 from task_manager.views import user_hello1, tasks_create, list_of_tasks, get_task_by_id, tasks_count, \
-    tasks_count_by_status, tasks_of_overdue
+    tasks_count_by_status, tasks_of_overdue, SubTaskListCreateAPIView, SubTaskDetailUpdateDeleteView
 
 urlpatterns = [
     path('index_page/', index_page),
@@ -41,5 +41,9 @@ urlpatterns = [
     path('tasks/count', tasks_count),
     path('tasks/status_count', tasks_count_by_status),
     path('tasks/tasks_of_overdue', tasks_of_overdue),
+
+    path('subtasks', SubTaskListCreateAPIView.as_view()),
+    path('subtasks/<int:subtask_id>', SubTaskDetailUpdateDeleteView.as_view()),
+
 
 ]
