@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from books.views import list_of_books, get_book_detail, book_create
+from books.views import list_of_books, get_book_detail, book_create, update_book, delete_book
 from first_app.views import django_greetings, user_greetings, index_page, user_hello
 from task_manager.views import user_hello1, tasks_create, list_of_tasks, get_task_by_id, tasks_count, \
     tasks_count_by_status, tasks_of_overdue
@@ -30,8 +30,11 @@ urlpatterns = [
     path('greetings-f-str/', user_greetings, name='default_user_greetings'),
     path('hello/<str:name>/', user_hello),
     path('hello1/', user_hello1),
+
     path('books/', list_of_books),
     path('books/<int:book_id>/', get_book_detail),
+    path('books/<int:book_id>/update/', update_book),
+    path('books/<int:book_id>/delete/', delete_book),
     path('books/create/', book_create),
 
     path('tasks/create/', tasks_create),
