@@ -58,11 +58,11 @@ class CategoryCreateSerializer(serializers.ModelSerializer):
                 )
         return value
 
-    def create(self, validated_data: dict[str, str | int | float]) -> Category:
-        return super().create(validated_data)
-
-    def update(self, instance: Category, validated_data: dict[str, str | int | float]) -> Category:
-        return super().update(instance, validated_data)
+    # def create(self, validated_data: dict[str, str | int | float]) -> Category:
+    #     return super().create(validated_data)
+    #
+    # def update(self, instance: Category, validated_data: dict[str, str | int | float]) -> Category:
+    #     return super().update(instance, validated_data)
 
 
 # Задание 3: Использование вложенных сериализаторов

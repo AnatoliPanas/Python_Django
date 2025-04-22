@@ -1,6 +1,7 @@
 import os
 import django
 from django.db.models import Q, F, Count
+from django.db.models.functions import ExtractWeekDay, ExtractDay
 from django.utils import timezone
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'test_proj.settings')
@@ -71,7 +72,18 @@ from task_manager.models import Task, SubTask
 # # то удаляем саму задачу, а под задачи удалятся каскадно
 # Task.objects.filter(title="Prepare presentation").delete()
 
-test = Task.objects.values("status").annotate(Count("id"))
-print(test.query)
-for t in test:
-    print(t)
+# test = Task.objects.values("status").annotate(Count("id"))
+# print(test.query)
+# for t in test:
+#     print(t)
+
+
+
+testweek = Task.objects.all().annotate(weekday=ExtractWeekDay('deadline'))
+
+# Вывод SQL-запроса
+print(testweek)
+
+# Вывод результатов
+for t in testweek:
+    print(f"Task: {t}, Weekday: {t.weekday}")
