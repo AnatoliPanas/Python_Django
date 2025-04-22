@@ -22,15 +22,13 @@ class AuthorShortInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = [
-            "id",
-            "name",
-            "surname"
+            'id',
+            'name',
+            'surname'
         ]
-
 
 class BookListSerializer(serializers.ModelSerializer):
     author = AuthorShortInfoSerializer()
-    # author = AuthorShortInfoSerializer(many=True)
 
     class Meta:
         model = Book
@@ -46,10 +44,9 @@ class BookListSerializer(serializers.ModelSerializer):
 
 class BookDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
-    # publisher = serializers.StringRelatedField()
     publisher = serializers.SlugRelatedField(
         slug_field='username',
-        queryset=User.objects.all()
+        queryset=User.objects.all()  # N+1 проблема. в будущем рассмотрим решение
     )
 
     class Meta:
@@ -71,6 +68,7 @@ class BookCreateSerializer(serializers.ModelSerializer):
         required=False
     )
 
+
     class Meta:
         model = Book
         fields = [
@@ -88,15 +86,16 @@ class BookCreateSerializer(serializers.ModelSerializer):
         ]
 
     # def validate_field_name(self):
-    #     pass
+    #     ...
 
     def validate_pages(self, value: int):
         if value < 0:
             raise serializers.ValidationError(
-                "The number of pages must be a valid integer and prater than 0"
+                "The number of pages must be a valid integer and grater than 0"
             )
 
         return value
+
 
     def validate(self, attrs: dict[str, str | int | float]):
         disc_price = attrs.get('discounted_price')
@@ -107,20 +106,32 @@ class BookCreateSerializer(serializers.ModelSerializer):
         if disc_price and disc_price > attrs['price']:
             raise serializers.ValidationError(
                 {
-                    "discounted_price": "Цена со скидкой НЕ МОЖЕТ быть больше, чем оригинальна цена"
+                    "discounted_price": "Цена со скидкой НЕ МОЖЕТ быть больше, чем оригинальная цена"
                 }
             )
+
         return attrs
 
     def create(self, validated_data: dict[str, str | int | float]) -> Book:
-        validated_data['discounted_price'] = float(validated_data['price']) * 0.7
+        validated_data['discounted_price'] = float(validated_data['price']) * .7
         pub_email = validated_data.pop('publisher_email')
         publisher = User.objects.get(email=pub_email)
 
         book = Book.objects.create(publisher=publisher, **validated_data)
 
         return book
-        # return super().create(validated_data)
+
+        # {
+        #     "price": 29.99
+        # }
+        #
+        # -> -> custom_create()
+        #
+        # {
+        #     "price": 29.99,
+        #     "disc_price": "price * 0.7"
+        # } -> base_create(new_validated_data)
+
 
     def update(self, instance: Book, validated_data: dict[str, str | int | float]) -> Book:
         for attr, value in validated_data.items():
