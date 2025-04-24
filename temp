@@ -2,7 +2,7 @@ https://docs.djangoproject.com/en/5.1/ref/models/fields/
 https://docs.djangoproject.com/en/5.2/ref/models/options/
 
 pip install djangorestfraemwork - для работы с rest
-
+pip install django-filter
 
 pip install django-environ - для работы с .env
 pip install django
@@ -31,5 +31,7 @@ git push -u origin main
 git checkout -b name - добавляет ветку и переключается на нее
 git pull origin main - подтягиеваев в локальный
 git push origin main - отправляет на сервер
+
+git stage push -m "Заморозить изменения" - для заморозки изменения, например в другой ветки. Чтобы не делать add.
 
 Регистрация моделей происходит в файле проекта, admin.py

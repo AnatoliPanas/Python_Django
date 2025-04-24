@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     # 3-rd party
     "rest_framework",
+    "django_filters",
 
     # local
     'first_app.apps.FirstAppConfig',

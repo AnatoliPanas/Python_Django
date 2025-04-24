@@ -1,3 +1,5 @@
+from typing import Any
+
 from rest_framework import serializers
 
 from books.models import Book, User, Author
@@ -41,6 +43,22 @@ class BookListSerializer(serializers.ModelSerializer):
             'price'
         ]
 
+    def to_representation(self, instance):
+        representation: dict[str, Any] = super().to_representation(instance)
+
+        if self.context.get('include_related'):
+            representation['publisher'] = {
+                "id": instance.publisher.id,
+                "username": instance.publisher.username,
+                "email": instance.publisher.email,
+                "phone": instance.publisher.phone,
+                "role": instance.publisher.role,
+            }
+        else:
+            representation.pop('publisher', None)
+
+        return representation
+
 
 class BookDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
@@ -68,7 +86,6 @@ class BookCreateSerializer(serializers.ModelSerializer):
         required=False
     )
 
-
     class Meta:
         model = Book
         fields = [
@@ -95,7 +112,6 @@ class BookCreateSerializer(serializers.ModelSerializer):
             )
 
         return value
-
 
     def validate(self, attrs: dict[str, str | int | float]):
         disc_price = attrs.get('discounted_price')
@@ -131,7 +147,6 @@ class BookCreateSerializer(serializers.ModelSerializer):
         #     "price": 29.99,
         #     "disc_price": "price * 0.7"
         # } -> base_create(new_validated_data)
-
 
     def update(self, instance: Book, validated_data: dict[str, str | int | float]) -> Book:
         for attr, value in validated_data.items():

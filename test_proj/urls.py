@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from books.views import BooksListCreateAPIView, BookDetailUpdateDeleteAPIView
+from books.views import BooksListCreateView, BookDetailUpdateDeleteView
 from first_app.views import django_greetings, user_greetings, index_page, user_hello
 from task_manager.views import user_hello1, get_task_by_id, tasks_count, \
     tasks_count_by_status, tasks_of_overdue, SubTaskListCreateAPIView, SubTaskDetailUpdateDeleteView, \
@@ -32,8 +32,9 @@ urlpatterns = [
     path('hello/<str:name>/', user_hello),
     path('hello1/', user_hello1),
 
-    path('books/', BooksListCreateAPIView.as_view()),
-    path('books/<int:book_id>/', BookDetailUpdateDeleteAPIView.as_view()),
+    path('books/', BooksListCreateView.as_view()),
+    # path('books/<int:book_id>/', BookDetailUpdateDeleteView.as_view()),
+    path('books/<str:target_title>/', BookDetailUpdateDeleteView.as_view()),
 
 
     path('tasks/', TaskListCreateAPIView.as_view()),
