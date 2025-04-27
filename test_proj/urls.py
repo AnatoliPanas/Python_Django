@@ -15,13 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from books.views import BooksListCreateView, BookDetailUpdateDeleteView
 from first_app.views import django_greetings, user_greetings, index_page, user_hello
-from task_manager.views import user_hello1, get_task_by_id, tasks_count, \
-    tasks_count_by_status, tasks_of_overdue, SubTaskListCreateAPIView, SubTaskDetailUpdateDeleteView, \
-    TaskListCreateAPIView
+# from task_manager.views import get_task_by_id, tasks_count, \
+#     tasks_count_by_status, tasks_of_overdue, SubTaskListCreateAPIView, SubTaskDetailUpdateDeleteView, \
+#     TaskListCreateView
 
 urlpatterns = [
     path('index_page/', index_page),
@@ -30,21 +30,21 @@ urlpatterns = [
     path('greetings-f-str/<str:name>/', user_greetings),
     path('greetings-f-str/', user_greetings, name='default_user_greetings'),
     path('hello/<str:name>/', user_hello),
-    path('hello1/', user_hello1),
 
     path('books/', BooksListCreateView.as_view()),
     # path('books/<int:book_id>/', BookDetailUpdateDeleteView.as_view()),
     path('books/<str:target_title>/', BookDetailUpdateDeleteView.as_view()),
 
 
-    path('tasks/', TaskListCreateAPIView.as_view()),
-    path('tasks/<int:task_id>', get_task_by_id),
-    path('tasks/count', tasks_count),
-    path('tasks/status_count', tasks_count_by_status),
-    path('tasks/tasks_of_overdue', tasks_of_overdue),
+    # path('tasks/', TaskListCreateAPIView.as_view()),
+    # path('tasks/<int:task_id>', get_task_by_id),
+    # path('tasks/count', tasks_count),
+    # path('tasks/status_count', tasks_count_by_status),
+    # path('tasks/tasks_of_overdue', tasks_of_overdue),
+    #
+    # path('subtasks/', TaskListCreateView.as_view()),
+    # path('subtasks/<int:subtask_id>', SubTaskDetailUpdateDeleteView.as_view()),
 
-    path('subtasks/', SubTaskListCreateAPIView.as_view()),
-    path('subtasks/<int:subtask_id>', SubTaskDetailUpdateDeleteView.as_view()),
-
+    path('task/v1/', include('task_manager.urls')),
 
 ]
