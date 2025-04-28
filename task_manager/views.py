@@ -4,19 +4,22 @@ from django.db.models.functions import ExtractWeekDay
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, filters
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
-from task_manager.models import Task, SubTask
+from task_manager.models import Task, SubTask, Category
 from task_manager.serializers import (TaskCreateSerialize,
                                       TaskDetailSerializer,
                                       TaskStatusCountSerializer,
-                                      SubTaskCreateSerializer, SubTaskSerializer)
+                                      SubTaskCreateSerializer, SubTaskSerializer, CategoryCreateSerializer)
+
 
 class SubTaskPagination(PageNumberPagination):
     page_size = 5
@@ -26,6 +29,7 @@ class SubTaskPagination(PageNumberPagination):
         if page_size and page_size.isdigit():
             return int(page_size)
         return self.page_size
+
 
 class SubTaskListCreateView(ListCreateAPIView):
     queryset = SubTask.objects.all()
@@ -102,6 +106,7 @@ class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
         if self.request.method == 'GET':
             return SubTaskSerializer
         return SubTaskCreateSerializer
+
 
 # class SubTaskDetailUpdateDeleteView(APIView):
 #     def get(self, request: Request, **kwargs) -> Response:
@@ -217,6 +222,7 @@ class TaskListCreateView(ListCreateAPIView):
 
         return queryset
 
+
 class TaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     lookup_url_kwarg = 'task_id'
@@ -225,6 +231,7 @@ class TaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
         if self.request.method == 'GET':
             return TaskDetailSerializer
         return TaskCreateSerialize
+
 
 # class TaskListCreateAPIView(APIView):
 #     WEEKDAY_MAP = {
@@ -336,3 +343,32 @@ def tasks_of_overdue(request) -> Response:
     count_of_overdue_task = Task.objects.filter(deadline__lt=timezone.now()).count()
 
     return Response(data=f"{count_of_overdue_task=}", status=status.HTTP_200_OK)
+
+
+class CategoryViewSet(ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategoryCreateSerializer
+
+    @action(
+        detail=False,
+        methods=['get'],
+        url_path='statistic'
+    )
+    def get_task_count_by_category(self, request: Request) -> Response:
+        category_statistic = Category.objects.annotate(
+            count_tasks=Count('task')
+        )
+
+        data = [
+            {
+                "id": c.id,
+                "name": c.name,
+                "count_tasks": c.count_tasks,
+            }
+            for c in category_statistic
+        ]
+
+        return Response(
+            data=data,
+            status=status.HTTP_200_OK
+        )
