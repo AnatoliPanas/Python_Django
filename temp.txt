@@ -20,7 +20,7 @@ python .\manage.py shell - запуск консоли Django
 python -m venv .venv - создание виртуального окружения.
 .\.venv\Scripts\activate - активация виртуального окружения.
 
------------Git--------------
+-----------Git-------------
 https://github.com/github/gitignore/blob/main/Python.gitignore - gitignore от GitHub
 git init
 git branch -M main

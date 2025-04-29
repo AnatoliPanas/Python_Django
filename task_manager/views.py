@@ -21,20 +21,20 @@ from task_manager.serializers import (TaskCreateSerialize,
                                       SubTaskCreateSerializer, SubTaskSerializer, CategoryCreateSerializer)
 
 
-class SubTaskPagination(PageNumberPagination):
-    page_size = 5
-
-    def get_page_size(self, request):
-        page_size = request.query_params.get('page_size')
-        if page_size and page_size.isdigit():
-            return int(page_size)
-        return self.page_size
+# class SubTaskPagination(PageNumberPagination):
+#     page_size = 5
+#
+#     def get_page_size(self, request):
+#         page_size = request.query_params.get('page_size')
+#         if page_size and page_size.isdigit():
+#             return int(page_size)
+#         return self.page_size
 
 
 class SubTaskListCreateView(ListCreateAPIView):
     queryset = SubTask.objects.all()
 
-    pagination_class = SubTaskPagination
+    # pagination_class = SubTaskPagination
 
     filter_backends = [
         DjangoFilterBackend,
