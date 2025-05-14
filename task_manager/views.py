@@ -4,11 +4,11 @@ from django.db.models.functions import ExtractWeekDay
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, filters
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import SAFE_METHODS
+from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.views import APIView
@@ -21,20 +21,20 @@ from task_manager.serializers import (TaskCreateSerialize,
                                       SubTaskCreateSerializer, SubTaskSerializer, CategoryCreateSerializer)
 
 
-# class SubTaskPagination(PageNumberPagination):
-#     page_size = 5
-#
-#     def get_page_size(self, request):
-#         page_size = request.query_params.get('page_size')
-#         if page_size and page_size.isdigit():
-#             return int(page_size)
-#         return self.page_size
+class SubTaskPagination(PageNumberPagination):
+    page_size = 5
+
+    def get_page_size(self, request):
+        page_size = request.query_params.get('page_size')
+        if page_size and page_size.isdigit():
+            return int(page_size)
+        return self.page_size
 
 
 class SubTaskListCreateView(ListCreateAPIView):
     queryset = SubTask.objects.all()
-
-    # pagination_class = SubTaskPagination
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = SubTaskPagination
 
     filter_backends = [
         DjangoFilterBackend,
@@ -101,6 +101,7 @@ class SubTaskListCreateView(ListCreateAPIView):
 class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = SubTask.objects.all()
     lookup_url_kwarg = 'subtask_id'
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -192,6 +193,8 @@ class TaskListCreateView(ListCreateAPIView):
         'saturday': 7,
     }
 
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     queryset = Task.objects.all()
 
     filter_backends = [
@@ -226,6 +229,7 @@ class TaskListCreateView(ListCreateAPIView):
 class TaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     lookup_url_kwarg = 'task_id'
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -325,6 +329,7 @@ class TaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def tasks_count(request) -> Response:
     tasks_cn = Task.objects.count()
 
@@ -332,6 +337,7 @@ def tasks_count(request) -> Response:
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def tasks_count_by_status(request) -> Response:
     statuses_count_by_task = Task.objects.values("status").annotate(Count("id"))
     serializer = TaskStatusCountSerializer(statuses_count_by_task, many=True)
@@ -339,6 +345,7 @@ def tasks_count_by_status(request) -> Response:
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def tasks_of_overdue(request) -> Response:
     count_of_overdue_task = Task.objects.filter(deadline__lt=timezone.now()).count()
 
@@ -348,11 +355,13 @@ def tasks_of_overdue(request) -> Response:
 class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryCreateSerializer
+    permission_classes = [IsAdminUser]
 
     @action(
         detail=False,
         methods=['get'],
-        url_path='statistic'
+        url_path='statistic',
+
     )
     def get_task_count_by_category(self, request: Request) -> Response:
         category_statistic = Category.objects.annotate(

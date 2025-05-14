@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from task_manager.views import (tasks_count,
                                 tasks_count_by_status,
@@ -25,5 +26,7 @@ urlpatterns = [
     path('subtasks/', SubTaskListCreateView.as_view()),
     path('subtasks/<int:subtask_id>', SubTaskDetailUpdateDeleteView.as_view()),
     path('', include(router.urls)),
+    path('auth-login-jwt/', TokenObtainPairView.as_view()),
+    path('token_refresh/', TokenRefreshView.as_view()),
 
 ]
