@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, filters
 from rest_framework.decorators import api_view, action, permission_classes
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import SAFE_METHODS, IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
@@ -15,11 +15,20 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from task_manager.models import Task, SubTask, Category
+from task_manager.permissions.owner_permissions import IsOwnerOrReadOnly
 from task_manager.serializers import (TaskCreateSerialize,
                                       TaskDetailSerializer,
                                       TaskStatusCountSerializer,
                                       SubTaskCreateSerializer, SubTaskSerializer, CategoryCreateSerializer)
 
+
+class UserSubTasksListGenericView(ListAPIView):
+    serializer_class = SubTaskSerializer
+
+    def get_queryset(self):
+        return SubTask.objects.filter(
+            owner=self.request.user
+        )
 
 class SubTaskPagination(PageNumberPagination):
     page_size = 5
@@ -50,6 +59,9 @@ class SubTaskListCreateView(ListCreateAPIView):
         if self.request.method == 'GET':
             return SubTaskSerializer
         return SubTaskCreateSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 # class SubTaskListCreateAPIView(APIView, PageNumberPagination):
@@ -101,7 +113,7 @@ class SubTaskListCreateView(ListCreateAPIView):
 class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = SubTask.objects.all()
     lookup_url_kwarg = 'subtask_id'
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -174,6 +186,13 @@ class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
 #             status=status.HTTP_202_ACCEPTED
 #         )
 
+class UserTasksListGenericView(ListAPIView):
+    serializer_class = TaskDetailSerializer
+
+    def get_queryset(self):
+        return Task.objects.filter(
+            owner=self.request.user
+        )
 
 class TaskListCreateView(ListCreateAPIView):
     WEEKDAY_MAP = {
@@ -225,11 +244,14 @@ class TaskListCreateView(ListCreateAPIView):
 
         return queryset
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class TaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     lookup_url_kwarg = 'task_id'
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

@@ -1,5 +1,6 @@
 from django.db import models
 
+from books.models import User
 from task_manager.models import Category
 
 
@@ -18,6 +19,13 @@ class Task(models.Model):
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="New")
     deadline = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
     class Meta:
         db_table = "task_manager_task"
