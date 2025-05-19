@@ -1,6 +1,8 @@
 https://docs.djangoproject.com/en/5.1/ref/models/fields/
 https://docs.djangoproject.com/en/5.2/ref/models/options/
 https://docs.djangoproject.com/en/5.1/howto/logging/#logging-how-to https://docs.djangoproject.com/en/5.1/howto/logging/#logging-how-to
+https://docs.djangoproject.com/en/5.1/topics/email/
+https://github.com/maildev/maildev/blob/main/docker-compose.yml - работа с smtp
 
 pip install drf-yasg - работа swagger
 pip install djangorestframework-simplejwt - для работы с токеном jwt
