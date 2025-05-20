@@ -4,6 +4,7 @@ https://docs.djangoproject.com/en/5.1/howto/logging/#logging-how-to https://docs
 https://docs.djangoproject.com/en/5.1/topics/email/
 https://github.com/maildev/maildev/blob/main/docker-compose.yml - работа с smtp
 
+pip install factory_boy - для создание фэйковых записей (https://factoryboy.readthedocs.io/en/stable/index.html )
 pip install drf-yasg - работа swagger
 pip install djangorestframework-simplejwt - для работы с токеном jwt
 pip install djangorestfraemwork - для работы с rest

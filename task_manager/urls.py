@@ -12,7 +12,8 @@ from task_manager.views import (tasks_count,
                                 SubTaskDetailUpdateDeleteView,
                                 TaskListCreateView,
                                 TaskDetailUpdateDeleteView,
-                                CategoryViewSet, UserTasksListGenericView, UserSubTasksListGenericView)
+                                CategoryViewSet, UserTasksListGenericView, UserSubTasksListGenericView, LogInAPIView,
+                                LogOutAPIView)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -43,6 +44,8 @@ urlpatterns = [
     path('subtasks/<int:subtask_id>', SubTaskDetailUpdateDeleteView.as_view()),
     path('subtasks-me/', UserSubTasksListGenericView.as_view()),
     path('', include(router.urls)),
+    path('auth-login/', LogInAPIView.as_view()),
+    path('auth-logout/', LogOutAPIView.as_view()),
     path('auth-login-jwt/', TokenObtainPairView.as_view()),
     path('token_refresh/', TokenRefreshView.as_view()),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
