@@ -108,7 +108,8 @@ class TaskCreateSerialize(serializers.ModelSerializer):
             "description",
             "categories",
             "owner",
-            "deadline"
+            "deadline",
+            "status"
         ]
 
     def validate_deadline(self, value: str):
